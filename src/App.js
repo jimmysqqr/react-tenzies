@@ -1,6 +1,7 @@
 import React from "react";
 import Die from "./components/Die";
 import Stats from "./components/Stats";
+import SubButtons from "./components/SubButtons";
 import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
 import "./style.css";
@@ -40,17 +41,16 @@ export default function App() {
 		const allHeld = dice.every((die) => die.isHeld);
 		const firstValue = dice[0].value;
 		const allSameValue = dice.every((die) => die.value === firstValue);
+        
 		if (allHeld && allSameValue) {
 			// logic to save to local storage if new record
 			console.log(roll, record.roll, duration, record.duration);
 			if (roll < record.roll || record.roll === -1) {
-				console.log("new record of roll!!");
 				setRecord((prevRecord) => {
 					return { ...prevRecord, roll: roll };
 				});
 			}
 			if (duration < record.duration || record.duration === -1) {
-				console.log("new record of duration!!");
 				setRecord((prevRecord) => {
 					return { ...prevRecord, duration: duration };
 				});
@@ -102,6 +102,19 @@ export default function App() {
 		);
 	}
 
+	function toggleDiceView() {
+		setDiceView((prevDiceView) => {
+			return prevDiceView === "number" ? "dots" : "number";
+		});
+	}
+
+	function clearRecord() {
+		setRecord({
+			roll: -1,
+			duration: -1,
+		});
+	}
+
 	const diceElements = dice.map((die) => (
 		<Die
 			key={die.id}
@@ -125,32 +138,7 @@ export default function App() {
 			<button className="roll-dice" onClick={rollDice}>
 				{tenzies ? "New Game" : "Roll"}
 			</button>
-			<div className="secondary-buttons">
-				<button
-					className="toggle-dice-view"
-					onClick={() =>
-						setDiceView((prevDiceView) => {
-							return prevDiceView === "number"
-								? "dots"
-								: "number";
-						})
-					}
-				>
-					Toggle Dice View
-				</button>
-				<button
-					className="clear-record"
-					onClick={() => {
-						// clear record
-						setRecord({
-							roll: -1,
-							duration: -1,
-						});
-					}}
-				>
-					Clear Record
-				</button>
-			</div>
+			<SubButtons toggleDiceView={toggleDiceView} clearRecord={clearRecord} />
 		</main>
 	);
 }
