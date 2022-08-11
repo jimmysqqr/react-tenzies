@@ -9,5 +9,8 @@ export default function Dots(props) {
 
 	const dotsArray = [...Array(props.value)].map(() => <Dot key={nanoid()} />);
 
-	return <div>{dotsArray}</div>;
+    const dotsStyleArray = ["dot-1, dot-2, dot-3, dot-4, dot-5, dot-6"]
+    const dotsStyle = dotsStyleArray[props.value - 1]
+
+	return <div className="dot-container">{dotsArray}</div>;
 }

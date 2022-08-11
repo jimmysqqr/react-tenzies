@@ -3,7 +3,7 @@ import Die from "./components/Die";
 import Stats from "./components/Stats";
 import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
-import './style.css';
+import "./style.css";
 
 /**
  * TODO:
@@ -27,6 +27,8 @@ export default function App() {
 				duration: -1,
 			}
 	);
+
+	const [diceView, setDiceView] = React.useState("number");
 
 	// useEffect to detect change in record
 	React.useEffect(() => {
@@ -106,7 +108,7 @@ export default function App() {
 			value={die.value}
 			isHeld={die.isHeld}
 			holdDice={() => holdDice(die.id)}
-			// diceView={diceView}
+			diceView={diceView}
 		/>
 	));
 
@@ -125,6 +127,18 @@ export default function App() {
 			</button>
 			<div className="secondary-buttons">
 				<button
+					className="toggle-dice-view"
+					onClick={() =>
+						setDiceView((prevDiceView) => {
+							return prevDiceView === "number"
+								? "dots"
+								: "number";
+						})
+					}
+				>
+					Toggle Dice View
+				</button>
+				<button
 					className="clear-record"
 					onClick={() => {
 						// clear record
@@ -132,7 +146,6 @@ export default function App() {
 							roll: -1,
 							duration: -1,
 						});
-						console.log("record cleared");
 					}}
 				>
 					Clear Record
