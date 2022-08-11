@@ -98,3 +98,10 @@ main {
     right: -145px;
     font-size: 0.8rem;
 }
+
+.dot {
+    height: 10px;
+    width: 10px;
+    background-color: black;
+    border-radius: 50%;
+}
