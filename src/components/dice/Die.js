@@ -5,6 +5,7 @@ import ThreeDots from "./ThreeDots";
 import FourDots from "./FourDots";
 import FiveDots from "./FiveDots";
 import SixDots from "./SixDots";
+import "./dots.css"
 
 export default function Die(props) {
 	const styles = {

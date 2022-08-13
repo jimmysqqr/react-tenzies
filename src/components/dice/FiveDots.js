@@ -1,5 +1,4 @@
 import React from "react";
-import Dot from "./Dot"
 
 export default function ThreeDot() {
     return (

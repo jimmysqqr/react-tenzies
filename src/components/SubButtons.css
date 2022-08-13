@@ -1,0 +1,30 @@
+.sub-buttons-container {
+    justify-content: space-between;
+    display: flex;
+    width: 29em;
+    height: 1.3em;
+}
+
+.toggle-dice-view {
+    color: purple;
+    font-family: 'Karla', sans-serif;
+    cursor: pointer;
+    margin: 0px;
+    padding: 0px;
+    /* position: relative; */
+    /* bottom: -15px;
+    right: 145px; */
+    font-size: 0.8rem;
+}
+
+.clear-record {
+    color: red;
+    font-family: 'Karla', sans-serif;
+    cursor: pointer;
+    margin: 0px;
+    padding: 0px;
+    /* position: relative; */
+    /* bottom: -15px;
+    right: -145px; */
+    font-size: 0.8rem;
+}

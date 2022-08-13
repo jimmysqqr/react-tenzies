@@ -1,0 +1,14 @@
+.stats {
+    display: grid;
+    font-family: 'Inter', sans-serif;
+    grid-template: 30px 30px / minmax(120px, auto) minmax(120px, auto);
+    margin: 0px;
+    margin-top: 2px;
+}
+
+.stats > p {
+    margin: 5px 15px;
+    padding: 0px;
+    font-size: 0.9em;
+    color: rgb(97, 97, 97);
+}

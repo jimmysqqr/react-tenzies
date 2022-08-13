@@ -1,8 +1,9 @@
 import React from "react";
+import "./SubButtons.css"
 
 export default function SubButtons(props) {
 	return (
-		<div>
+		<div className="sub-buttons-container">
 			<button
 				className="toggle-dice-view"
 				onClick={props.toggleDiceView}
