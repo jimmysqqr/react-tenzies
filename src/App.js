@@ -18,16 +18,23 @@ import "./App.css";
  *      - have a separate css file to style the grid and placement of dots
  *      - or maybe concat the nanoid of the die to the dot id? no
  *      - or concat index of the die (from 0 to 9) "die-1-dot-1" (but die-1-dot-1 can be of the value 1 or 6, which is diff position) no
- * 5. fix time duration
- * 6. write what challenges i face and the solutions (localStorage->useEffect, dots css->prerender, time->timing events)
+ * 5. fix time duration /
+ * 6. write what challenges i face and the solutions 
+ *      - (localStorage->useEffect, dots css->prerender, time->timing events)
+ *      - learnt css
+ * 7. modify the first game start - disable dice (no need), and change button to new game button / , only then start time /
+ *      - remove all dice before game start (no) OR set all isHeld = false
+ *      
+ * 8. add the original game (more like hide the added features)
+ * 9. add some effect to stats record if got new record - blinking text color?
+ * 10. restart game button
  */
 
 export default function App() {
 	const [dice, setDice] = React.useState(allNewDice());
-	const [tenzies, setTenzies] = React.useState(false);
+	const [isTenzies, setIsTenzies] = React.useState(false);
 	const [roll, setRoll] = React.useState(0);
-	// const [startTime, setStartTime] = React.useState(new Date());
-	// const [duration, setDuration] = React.useState(0);
+    const [time, setTime] = React.useState(0);
 
 	const [record, setRecord] = React.useState(
 		() =>
@@ -38,13 +45,13 @@ export default function App() {
 	);
 
 	const [diceView, setDiceView] = React.useState("number");
-	const [time, setTime] = React.useState(0);
+    const [isFirstStart, setIsFirstStart] = React.useState(true)
 
 	// useEffect to render elapsed time
 	React.useEffect(() => {
 		let intervalID = null;
 
-		if (!tenzies) {
+		if (!isFirstStart && !isTenzies ) {
 			intervalID = window.setInterval(
 				() => setTime((prevTime) => prevTime + 10),
 				10
@@ -54,36 +61,36 @@ export default function App() {
 		}
         
 		return () => window.clearInterval(intervalID);
-	}, [tenzies]);
-
-	// useEffect to detect change in record
+	}, [isTenzies, isFirstStart]);
+    
+	// useEffect to sync states to trigger endgame
 	React.useEffect(() => {
-		localStorage.setItem("record", JSON.stringify(record));
-	}, [record]);
-
-	// useEffect to handle endgame states
-	React.useEffect(() => {
-		const allHeld = dice.every((die) => die.isHeld);
+        const allHeld = dice.every((die) => die.isHeld);
 		const firstValue = dice[0].value;
 		const allSameValue = dice.every((die) => die.value === firstValue);
-
+        
 		if (allHeld && allSameValue) {
-			// logic to save to local storage if new record
-			// console.log(roll, record.roll, time, record.time);
+            // logic to save to local storage if new record
 			if (roll < record.roll || record.roll === -1) {
-				setRecord((prevRecord) => {
-					return { ...prevRecord, roll: roll };
+                setRecord((prevRecord) => {
+                    return { ...prevRecord, roll: roll };
 				});
 			}
 			if (time < record.time || record.time === -1) {
-				setRecord((prevRecord) => {
-					return { ...prevRecord, time: time };
+                setRecord((prevRecord) => {
+                    return { ...prevRecord, time: time };
 				});
 			}
-			setTenzies(true);
+			setIsTenzies(true);
 		}
 	}, [dice]);
+    
+    // useEffect to detect change in record
+    React.useEffect(() => {
+        localStorage.setItem("record", JSON.stringify(record));
+    }, [record]);
 
+    
 	function generateNewDie() {
 		return {
 			value: Math.ceil(Math.random() * 6),
@@ -101,21 +108,22 @@ export default function App() {
 	}
 
 	function rollDice() {
-		if (!tenzies) {
-			setDice((oldDice) =>
-				oldDice.map((die) => {
-					return die.isHeld ? die : generateNewDie();
-				})
-			);
-			setRoll((prevRoll) => prevRoll + 1);
-			// const duration = Math.floor((new Date() - startTime) / 1000);
-			// setDuration(duration);
+		if (!isTenzies) {
+            setRoll((prevRoll) => prevRoll + 1);
+            if (isFirstStart) { // on first game start, re-roll all dice
+                setIsFirstStart(prevIsFirstStart => !prevIsFirstStart)
+                setDice(allNewDice());
+            } else { // in a game, only re-roll dice that are not held
+                setDice((oldDice) =>
+                    oldDice.map((die) => {
+                        return die.isHeld ? die : generateNewDie();
+                    })
+                );
+            }
 		} else {
-			setTenzies(false);
+			setIsTenzies(false);
 			setDice(allNewDice());
 			setRoll(0);
-			// setDuration(0);
-			// setStartTime(new Date());
             setTime(0);
 		}
 	}
@@ -153,17 +161,17 @@ export default function App() {
 
 	return (
 		<main>
-			{tenzies && <Confetti />}
+			{isTenzies && <Confetti />}
 			<h1 className="title">Tenzies</h1>
 			<p className="instructions">
 				Roll until all dice are the same. Click each die to freeze it at
 				its current value between rolls.
 			</p>
-			<div className="dice-container">{diceElements}</div>
+			<div className="dice-container" disabled={true}>{diceElements}</div>
 			<button className="roll-dice" onClick={rollDice}>
-				{tenzies ? "New Game" : "Roll"}
+				{isFirstStart || isTenzies ? "New Game" : "Roll"}
 			</button>
-			<Stats roll={roll} time={time} record={record} />
+			<Stats roll={roll} time={time} record={record}/>
 			<SubButtons
 				toggleDiceView={toggleDiceView}
 				clearRecord={clearRecord}
