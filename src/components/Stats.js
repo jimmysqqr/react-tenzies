@@ -13,11 +13,10 @@ export default function Stats(props) {
 	return (
 		<div className="stats">
 			<p>Rolls: {props.roll}</p>
-			{/* <p>milliseconds: {(props.time / 10)}</p> */}
-			<p>
+            <p>
 				Time:
-				{` ${formatSeconds(props.time)}.${formatMilliseconds(props.time)}`}
-				s
+				{` ${formatSeconds(props.time)}.`}
+                {(props.time === 0) ? "0" : `${formatMilliseconds(props.time)}`}s
 			</p>
 			<p>
 				Best rolls: {props.record.roll === -1 ? "-" : props.record.roll}
