@@ -1,30 +1,27 @@
 .sub-buttons-container {
-    justify-content: space-between;
-    display: flex;
+    display: grid;
+    grid-template: 1.3em / repeat(3, 1fr);
     width: 29em;
     height: 1.3em;
+    gap: 4em;
+}
+
+.sub-button {
+    font-family: 'Karla', sans-serif;
+    cursor: pointer;
+    margin: 0px;
+    padding: 0px;
+    font-size: 0.8rem;
 }
 
 .toggle-dice-view {
     color: purple;
-    font-family: 'Karla', sans-serif;
-    cursor: pointer;
-    margin: 0px;
-    padding: 0px;
-    /* position: relative; */
-    /* bottom: -15px;
-    right: 145px; */
-    font-size: 0.8rem;
+}
+
+.restart-game {
+    color: #d4a300;
 }
 
 .clear-record {
     color: red;
-    font-family: 'Karla', sans-serif;
-    cursor: pointer;
-    margin: 0px;
-    padding: 0px;
-    /* position: relative; */
-    /* bottom: -15px;
-    right: -145px; */
-    font-size: 0.8rem;
 }

@@ -5,13 +5,19 @@ export default function SubButtons(props) {
 	return (
 		<div className="sub-buttons-container">
 			<button
-				className="toggle-dice-view"
+				className="sub-button toggle-dice-view"
 				onClick={props.toggleDiceView}
 			>
 				Toggle Dice View
 			</button>
+            <button
+				className="sub-button restart-game"
+				onClick={props.restartGame}
+			>
+				Restart Game
+			</button>
 			<button
-				className="clear-record"
+				className="sub-button clear-record"
 				onClick={props.clearRecord}
 			>
 				Clear Record
