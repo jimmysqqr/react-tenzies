@@ -200,7 +200,7 @@ export default function App() {
 				</>
 			)}
 			<button className="toggle-game-view" onClick={toggleGameView}>
-				Toggle Features
+				Toggle Game View
 			</button>
 		</main>
 	);
