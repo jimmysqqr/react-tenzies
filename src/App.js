@@ -4,39 +4,57 @@ import Stats from "./components/Stats";
 import SubButtons from "./components/SubButtons";
 import { nanoid } from "nanoid";
 import Confetti from "react-confetti";
-import "./style.css";
+import "./App.css";
 
 /**
  * TODO:
  * 1. add CSS dots /
  * 2. add function to toggle dice view /
  * 3. put as separate component /
- * 4. style dots
- *      - cant render dynamically bcos cant have duplicate id's, so only solution now is to pre-render the 6 faces 
+ * 4. style dots /
+ *      - cant render dynamically bcos cant have duplicate id's, so only solution now is to pre-render the 6 faces
  *      - create a subfolder for die dots
  *      - 1 component for each value (OneDot, TwoDots, ThreeDots ...)
  *      - have a separate css file to style the grid and placement of dots
- *      - or maybe concat the nanoid of the die to the dot id?
- *      - or concat index of the die (from 0 to 9) "die-1-dot-1" (but die-1-dot-1 can be of the value 1 or 6, which is diff position)
+ *      - or maybe concat the nanoid of the die to the dot id? no
+ *      - or concat index of the die (from 0 to 9) "die-1-dot-1" (but die-1-dot-1 can be of the value 1 or 6, which is diff position) no
  * 5. fix time duration
+ * 6. write what challenges i face and the solutions (localStorage->useEffect, dots css->prerender, time->timing events)
  */
 
 export default function App() {
 	const [dice, setDice] = React.useState(allNewDice());
 	const [tenzies, setTenzies] = React.useState(false);
 	const [roll, setRoll] = React.useState(0);
-	const [startTime, setStartTime] = React.useState(new Date());
-	const [duration, setDuration] = React.useState(0);
+	// const [startTime, setStartTime] = React.useState(new Date());
+	// const [duration, setDuration] = React.useState(0);
 
 	const [record, setRecord] = React.useState(
 		() =>
 			JSON.parse(localStorage.getItem("record")) || {
 				roll: -1,
-				duration: -1,
+				time: -1,
 			}
 	);
 
 	const [diceView, setDiceView] = React.useState("number");
+	const [time, setTime] = React.useState(0);
+
+	// useEffect to render elapsed time
+	React.useEffect(() => {
+		let intervalID = null;
+
+		if (!tenzies) {
+			intervalID = window.setInterval(
+				() => setTime((prevTime) => prevTime + 10),
+				10
+			);
+		} else {
+			window.clearInterval(intervalID);
+		}
+        
+		return () => window.clearInterval(intervalID);
+	}, [tenzies]);
 
 	// useEffect to detect change in record
 	React.useEffect(() => {
@@ -51,15 +69,15 @@ export default function App() {
 
 		if (allHeld && allSameValue) {
 			// logic to save to local storage if new record
-			console.log(roll, record.roll, duration, record.duration);
+			// console.log(roll, record.roll, time, record.time);
 			if (roll < record.roll || record.roll === -1) {
 				setRecord((prevRecord) => {
 					return { ...prevRecord, roll: roll };
 				});
 			}
-			if (duration < record.duration || record.duration === -1) {
+			if (time < record.time || record.time === -1) {
 				setRecord((prevRecord) => {
-					return { ...prevRecord, duration: duration };
+					return { ...prevRecord, time: time };
 				});
 			}
 			setTenzies(true);
@@ -90,14 +108,15 @@ export default function App() {
 				})
 			);
 			setRoll((prevRoll) => prevRoll + 1);
-			const duration = Math.floor((new Date() - startTime) / 1000);
-			setDuration(duration);
+			// const duration = Math.floor((new Date() - startTime) / 1000);
+			// setDuration(duration);
 		} else {
 			setTenzies(false);
 			setDice(allNewDice());
 			setRoll(0);
-			setDuration(0);
-			setStartTime(new Date());
+			// setDuration(0);
+			// setStartTime(new Date());
+            setTime(0);
 		}
 	}
 
@@ -118,7 +137,7 @@ export default function App() {
 	function clearRecord() {
 		setRecord({
 			roll: -1,
-			duration: -1,
+			time: -1,
 		});
 	}
 
@@ -141,11 +160,14 @@ export default function App() {
 				its current value between rolls.
 			</p>
 			<div className="dice-container">{diceElements}</div>
-			<Stats roll={roll} time={duration} record={record} />
 			<button className="roll-dice" onClick={rollDice}>
 				{tenzies ? "New Game" : "Roll"}
 			</button>
-			<SubButtons toggleDiceView={toggleDiceView} clearRecord={clearRecord} />
+			<Stats roll={roll} time={time} record={record} />
+			<SubButtons
+				toggleDiceView={toggleDiceView}
+				clearRecord={clearRecord}
+			/>
 		</main>
 	);
 }
