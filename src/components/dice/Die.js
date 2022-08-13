@@ -5,7 +5,7 @@ import ThreeDots from "./ThreeDots";
 import FourDots from "./FourDots";
 import FiveDots from "./FiveDots";
 import SixDots from "./SixDots";
-import "./dots.css"
+import "./dots.css";
 
 export default function Die(props) {
 	const styles = {
@@ -25,7 +25,7 @@ export default function Die(props) {
 	return (
 		<div
 			className={`die-face ${
-				props.diceView === "number" ? "number-view-container" : ""
+				props.diceView === "number" && "number-view-container"
 			}`}
 			style={styles}
 			onClick={props.holdDice}

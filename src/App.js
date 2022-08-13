@@ -25,9 +25,9 @@ import "./App.css";
  * 7. modify the first game start - disable dice (no need), and change button to new game button / , only then start time /
  *      - remove all dice before game start (no) OR set all isHeld = false
  *
- * 8. add the original game (more like hide the added features) /
- * 9. add some effect to stats record if got new record - blinking text color?
- * 10. restart game button /
+ * 8. restart game button /
+ * 9. add the original game (more like hide the added features) /
+ * 10. add some effect to stats record if got new record - blinking text color? /
  */
 
 export default function App() {
@@ -47,6 +47,10 @@ export default function App() {
 	const [diceView, setDiceView] = React.useState("number"); // "number", "dots"
 	const [gameView, setGameView] = React.useState("new"); // "new", "old"
 	const [isFirstStart, setIsFirstStart] = React.useState(true);
+	const [isNewRecord, setIsNewRecord] = React.useState({
+		roll: false,
+		time: false,
+	});
 
 	// useEffect to render elapsed time
 	React.useEffect(() => {
@@ -71,22 +75,28 @@ export default function App() {
 		const allSameValue = dice.every((die) => die.value === firstValue);
 
 		if (allHeld && allSameValue) {
-			// logic to save to local storage if new record
+			// logic to update record if new record
 			if (roll < record.roll || record.roll === -1) {
 				setRecord((prevRecord) => {
 					return { ...prevRecord, roll: roll };
+				});
+				setIsNewRecord((prevIsNewRecord) => {
+					return { ...prevIsNewRecord, roll: true };
 				});
 			}
 			if (time < record.time || record.time === -1) {
 				setRecord((prevRecord) => {
 					return { ...prevRecord, time: time };
 				});
+				setIsNewRecord((prevIsNewRecord) => {
+					return { ...prevIsNewRecord, time: true };
+				});
 			}
 			setIsTenzies(true);
 		}
 	}, [dice]);
 
-	// useEffect to detect change in record
+	// useEffect to detect change (improvement) in record
 	React.useEffect(() => {
 		localStorage.setItem("record", JSON.stringify(record));
 	}, [record]);
@@ -127,6 +137,10 @@ export default function App() {
 			setDice(allNewDice());
 			setRoll(0);
 			setTime(0);
+			setIsNewRecord({
+				roll: false,
+				time: false,
+			});
 		}
 	}
 
@@ -186,12 +200,22 @@ export default function App() {
 			<div className="dice-container" disabled={true}>
 				{diceElements}
 			</div>
-			<button className="roll-dice" onClick={rollDice}>
+			<button
+				className={`roll-dice ${
+					isFirstStart || isTenzies ? "new-game-color" : "roll-color"
+				}`}
+				onClick={rollDice}
+			>
 				{isFirstStart || isTenzies ? "New Game" : "Roll"}
 			</button>
 			{gameView === "new" && (
 				<>
-					<Stats roll={roll} time={time} record={record} />
+					<Stats
+						roll={roll}
+						time={time}
+						record={record}
+						isNewRecord={isNewRecord}
+					/>
 					<SubButtons
 						toggleDiceView={toggleDiceView}
 						restartGame={restartGame}
