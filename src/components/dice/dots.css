@@ -1,0 +1,68 @@
+.die-face {
+    height: 50px;
+    width: 50px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.number-view-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.die-num {
+    font-size: 2rem;
+}
+
+.dots-view-container {
+    display: grid;
+    grid-template: repeat(3, 0.85em) / repeat(3, 1fr);
+    margin: 0.35em;
+}
+
+.dot {
+    height: 0.6em;
+    width: 0.6em;
+    background-color: black;
+    border-radius: 50%;
+    margin: 0.1em;
+}
+
+.value-1-dot-1, .value-3-dot-2, .value-5-dot-5 {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.value-2-dot-1, .value-3-dot-1, .value-4-dot-3, .value-5-dot-3, .value-6-dot-5 {
+    grid-column: 1;
+    grid-row: 3;
+}
+
+.value-2-dot-2, .value-3-dot-3, .value-4-dot-2, .value-5-dot-2, .value-6-dot-2 {
+    grid-column: 3;
+    grid-row: 1;
+}
+
+.value-4-dot-1, .value-5-dot-1, .value-6-dot-1 {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.value-4-dot-4, .value-5-dot-4, .value-6-dot-6 {
+    grid-column: 3;
+    grid-row: 3;
+}
+
+.value-6-dot-3 {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.value-6-dot-4 {
+    grid-column: 3;
+    grid-row: 2;
+}

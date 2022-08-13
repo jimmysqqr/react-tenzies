@@ -1,5 +1,5 @@
 import React from "react";
-import Die from "./components/Die";
+import Die from "./components/dice/Die";
 import Stats from "./components/Stats";
 import SubButtons from "./components/SubButtons";
 import { nanoid } from "nanoid";
@@ -8,10 +8,17 @@ import "./style.css";
 
 /**
  * TODO:
- * 1. add CSS buttons
- * 2. add function to toggle dice view
- * 3. put as separate component
- * 4. fix time duration
+ * 1. add CSS dots /
+ * 2. add function to toggle dice view /
+ * 3. put as separate component /
+ * 4. style dots
+ *      - cant render dynamically bcos cant have duplicate id's, so only solution now is to pre-render the 6 faces 
+ *      - create a subfolder for die dots
+ *      - 1 component for each value (OneDot, TwoDots, ThreeDots ...)
+ *      - have a separate css file to style the grid and placement of dots
+ *      - or maybe concat the nanoid of the die to the dot id?
+ *      - or concat index of the die (from 0 to 9) "die-1-dot-1" (but die-1-dot-1 can be of the value 1 or 6, which is diff position)
+ * 5. fix time duration
  */
 
 export default function App() {
@@ -41,7 +48,7 @@ export default function App() {
 		const allHeld = dice.every((die) => die.isHeld);
 		const firstValue = dice[0].value;
 		const allSameValue = dice.every((die) => die.value === firstValue);
-        
+
 		if (allHeld && allSameValue) {
 			// logic to save to local storage if new record
 			console.log(roll, record.roll, duration, record.duration);
