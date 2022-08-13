@@ -19,22 +19,22 @@ import "./App.css";
  *      - or maybe concat the nanoid of the die to the dot id? no
  *      - or concat index of the die (from 0 to 9) "die-1-dot-1" (but die-1-dot-1 can be of the value 1 or 6, which is diff position) no
  * 5. fix time duration /
- * 6. write what challenges i face and the solutions 
+ * 6. write what challenges i face and the solutions
  *      - (localStorage->useEffect, dots css->prerender, time->timing events)
- *      - learnt css
+ *      - learnt css (grid, draw circle, animation)
  * 7. modify the first game start - disable dice (no need), and change button to new game button / , only then start time /
  *      - remove all dice before game start (no) OR set all isHeld = false
- *      
- * 8. add the original game (more like hide the added features)
+ *
+ * 8. add the original game (more like hide the added features) /
  * 9. add some effect to stats record if got new record - blinking text color?
- * 10. restart game button
+ * 10. restart game button /
  */
 
 export default function App() {
-	const [dice, setDice] = React.useState(allNewDice());
+	const [dice, setDice] = React.useState(allNewDice()); // array of objects
 	const [isTenzies, setIsTenzies] = React.useState(false);
 	const [roll, setRoll] = React.useState(0);
-    const [time, setTime] = React.useState(0);
+	const [time, setTime] = React.useState(0);
 
 	const [record, setRecord] = React.useState(
 		() =>
@@ -42,16 +42,17 @@ export default function App() {
 				roll: -1,
 				time: -1,
 			}
-	);
+	); // a single object
 
-	const [diceView, setDiceView] = React.useState("number");
-    const [isFirstStart, setIsFirstStart] = React.useState(true)
+	const [diceView, setDiceView] = React.useState("number"); // "number", "dots"
+	const [gameView, setGameView] = React.useState("new"); // "new", "old"
+	const [isFirstStart, setIsFirstStart] = React.useState(true);
 
 	// useEffect to render elapsed time
 	React.useEffect(() => {
 		let intervalID = null;
 
-		if (!isFirstStart && !isTenzies ) {
+		if (!isFirstStart && !isTenzies) {
 			intervalID = window.setInterval(
 				() => setTime((prevTime) => prevTime + 10),
 				10
@@ -59,38 +60,37 @@ export default function App() {
 		} else {
 			window.clearInterval(intervalID);
 		}
-        
+
 		return () => window.clearInterval(intervalID);
 	}, [isTenzies, isFirstStart]);
-    
+
 	// useEffect to sync states to trigger endgame
 	React.useEffect(() => {
-        const allHeld = dice.every((die) => die.isHeld);
+		const allHeld = dice.every((die) => die.isHeld);
 		const firstValue = dice[0].value;
 		const allSameValue = dice.every((die) => die.value === firstValue);
-        
+
 		if (allHeld && allSameValue) {
-            // logic to save to local storage if new record
+			// logic to save to local storage if new record
 			if (roll < record.roll || record.roll === -1) {
-                setRecord((prevRecord) => {
-                    return { ...prevRecord, roll: roll };
+				setRecord((prevRecord) => {
+					return { ...prevRecord, roll: roll };
 				});
 			}
 			if (time < record.time || record.time === -1) {
-                setRecord((prevRecord) => {
-                    return { ...prevRecord, time: time };
+				setRecord((prevRecord) => {
+					return { ...prevRecord, time: time };
 				});
 			}
 			setIsTenzies(true);
 		}
 	}, [dice]);
-    
-    // useEffect to detect change in record
-    React.useEffect(() => {
-        localStorage.setItem("record", JSON.stringify(record));
-    }, [record]);
 
-    
+	// useEffect to detect change in record
+	React.useEffect(() => {
+		localStorage.setItem("record", JSON.stringify(record));
+	}, [record]);
+
 	function generateNewDie() {
 		return {
 			value: Math.ceil(Math.random() * 6),
@@ -109,22 +109,24 @@ export default function App() {
 
 	function rollDice() {
 		if (!isTenzies) {
-            setRoll((prevRoll) => prevRoll + 1);
-            if (isFirstStart) { // on first game start, re-roll all dice
-                setIsFirstStart(prevIsFirstStart => !prevIsFirstStart)
-                setDice(allNewDice());
-            } else { // in a game, only re-roll dice that are not held
-                setDice((oldDice) =>
-                    oldDice.map((die) => {
-                        return die.isHeld ? die : generateNewDie();
-                    })
-                );
-            }
+			setRoll((prevRoll) => prevRoll + 1);
+			if (isFirstStart) {
+				// on first game start or game reset, re-roll all dice
+				setIsFirstStart(false);
+				setDice(allNewDice());
+			} else {
+				// in a game, only re-roll dice that are not held
+				setDice((oldDice) =>
+					oldDice.map((die) => {
+						return die.isHeld ? die : generateNewDie();
+					})
+				);
+			}
 		} else {
 			setIsTenzies(false);
 			setDice(allNewDice());
 			setRoll(0);
-            setTime(0);
+			setTime(0);
 		}
 	}
 
@@ -140,6 +142,20 @@ export default function App() {
 		setDiceView((prevDiceView) => {
 			return prevDiceView === "number" ? "dots" : "number";
 		});
+	}
+
+	function toggleGameView() {
+		setGameView((prevGameView) => {
+			return prevGameView === "new" ? "old" : "new";
+		});
+	}
+
+	function restartGame() {
+		setIsFirstStart(true);
+		setIsTenzies(false);
+		setDice(allNewDice());
+		setRoll(0);
+		setTime(0);
 	}
 
 	function clearRecord() {
@@ -167,15 +183,25 @@ export default function App() {
 				Roll until all dice are the same. Click each die to freeze it at
 				its current value between rolls.
 			</p>
-			<div className="dice-container" disabled={true}>{diceElements}</div>
+			<div className="dice-container" disabled={true}>
+				{diceElements}
+			</div>
 			<button className="roll-dice" onClick={rollDice}>
 				{isFirstStart || isTenzies ? "New Game" : "Roll"}
 			</button>
-			<Stats roll={roll} time={time} record={record}/>
-			<SubButtons
-				toggleDiceView={toggleDiceView}
-				clearRecord={clearRecord}
-			/>
+			{gameView === "new" && (
+				<>
+					<Stats roll={roll} time={time} record={record} />
+					<SubButtons
+						toggleDiceView={toggleDiceView}
+						restartGame={restartGame}
+						clearRecord={clearRecord}
+					/>
+				</>
+			)}
+			<button className="toggle-game-view" onClick={toggleGameView}>
+				Toggle Features
+			</button>
 		</main>
 	);
 }
