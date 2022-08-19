@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TwoDot() {
+export default function TwoDots() {
     return (
         <div className="dots-view-container" >
             <div className="dot value-2-dot-1"></div>

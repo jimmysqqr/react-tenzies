@@ -19,7 +19,7 @@ import "./App.css";
  *      - or maybe concat the nanoid of the die to the dot id? no
  *      - or concat index of the die (from 0 to 9) "die-1-dot-1" (but die-1-dot-1 can be of the value 1 or 6, which is diff position) no
  * 5. fix time duration /
- * 6. write what challenges i face and the solutions
+ * 6. write what challenges i face and the solutions /
  *      - (localStorage->useEffect, dots css->prerender, time->timing events)
  *      - learnt css (grid, draw circle, animation)
  * 7. modify the first game start - disable dice (no need), and change button to new game button / , only then start time /
@@ -28,6 +28,7 @@ import "./App.css";
  * 8. restart game button /
  * 9. add the original game (more like hide the added features) /
  * 10. add some effect to stats record if got new record - blinking text color? /
+ * 11. add state to time, so that App does not re-render
  */
 
 export default function App() {

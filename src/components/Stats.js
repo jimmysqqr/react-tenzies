@@ -10,7 +10,7 @@ export default function Stats(props) {
 	function formatMilliseconds(time) {
 		return (time / 10).toString().slice(-2, -1);
 	}
-    console.log(props.isNewRecord)
+    
 	return (
 		<div className="stats">
 			<p>Rolls: {props.roll}</p>
