@@ -37,8 +37,10 @@ A project is not complete without a proper reflection. Here are the 3 biggest ch
 
 <br>
 
-## Challenge 1: Rendering elapsed time
 ---
+
+## Challenge 1: Rendering elapsed time
+
 **Problem**: I need to track the elapsed time as a state while playing the game, but how should I calculate or run a timer? How do I increment the timer by a second when a second has passed?
 
 <br>
@@ -94,8 +96,10 @@ function formatMilliseconds(time) {
 ```
 <br>
 
-## Challenge 2: Storing new best record to browser's localStorage
 ---
+
+## Challenge 2: Storing new best record to browser's localStorage
+
 **Problem**: Whenever there is a new best record, I need to update & store the record locally. We can use `localStorage` to store data, which is saved across browser sessions. 
 
 <br>
@@ -169,8 +173,10 @@ React.useEffect(() => {
 
 <br>
 
-## Challenge 3: Rendering dots on a dice with CSS
 ---
+
+## Challenge 3: Rendering dots on a dice with CSS
+
 **Problem**: I need to render dots of the correct value and positions onto the 10 dice faces. How do I *create* a dot in the first place? How do I position each dot neatly and correctly? This challenge became a great opportunity for me to brush up my CSS skills.
 
 <br>
