@@ -6,7 +6,7 @@ This is a modified version of one of the guided projects in the course. I added 
 
 Click this link to play the **modified** Tenzies game.
 
-> [Scrimba React Tenzies (react-tenzies-hnajbo6bu-jimmysqqr.vercel.app)](https://react-tenzies-hnajbo6bu-jimmysqqr.vercel.app/)
+> [Scrimba React Tenzies (react-tenzies-nine.vercel.app)](https://react-tenzies-nine.vercel.app/)
 
 Click this link to see the **original** Tenzies game from the guided project.
 
